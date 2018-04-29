@@ -24,7 +24,7 @@ function getParameterByName(name) {
   return match && decodeURIComponent(match[1].replace(/\+/g, ' '));
 };
 
-sigma.parsers.json( "/data/network.json",
+sigma.parsers.json( "/data/prc_network.json",
 
   {container: 'network-graph'},
 
