@@ -45,8 +45,9 @@
 <script src="../src/misc/sigma.misc.bindEvents.js"></script>
 <script src="../src/misc/sigma.misc.bindDOMEvents.js"></script>
 <script src="../src/misc/sigma.misc.drawHovers.js"></script>
+<script src="../lib/sigma.min.js"></script>
 <script src="../lib/sigma.layout.forceAtlas2.min.js"></script>
-<script src="../plugins/sigma.parsers.json/sigma.parsers.json.js"></script>
+<script src="../lib/sigma.parsers.json.min.js"></script>
 <script src="../plugins/sigma.plugins.animate/sigma.plugins.animate.js"></script>
 <script src="../plugins/sigma.plugins.dragNodes/sigma.plugins.dragNodes.js"></script>
 
@@ -57,7 +58,7 @@
 <!-- A placeholder for the graph -->
 <div id="container">
   <style>
-    #graph-container {
+    #network-graph {
       top: 0;
       bottom: 0;
       left: 0;
@@ -66,56 +67,37 @@
     }
 
   </style>
-  <div id="graph-container"></div>
-  <div id="sidebar">This area is not a drop target.</div>
+  <div id="network-graph"></div>
 
 </div>
 
-<!-- The most basic usage of the Sigma JSON parser -->
 <script>
-var i,
-    s,
-    N = 100,
-    E = 500;
-
+var g = {
+      nodes: [],
+      edges: []
+    };
 
 s = new sigma({
-  graph: sigma.classes.graph,
-  container: 'graph-container'
+  graph: g,
+  container: 'container',
+   renderer: {
+    container: document.getElementById('network-graph'),
+    type: 'canvas'
+   }
 });
 
-
 sigma.parsers.json( "/data/prc_network.json",
-
-  {container: 'graph-container'},
-
+  s,
   function(s) { //This function is passed an instance of Sigma s
 
     //Initialize nodes as a circle
     s.graph.nodes().forEach(function(node, i, a) {
-      node.x = Math.random();
-      node.y = Math.random();
-       size: Math.random();
-      id: 'n' + i;
-    label: 'Node ' + i;
+      node.x = Math.cos(Math.PI * 2 * i / a.length);
+      node.y = Math.sin(Math.PI * 2 * i / a.length);
     });
     s.refresh();
     s.startForceAtlas2();
   });
-var dragListener = sigma.plugins.dragNodes(s, s.renderers[0]);
-
-dragListener.bind('startdrag', function(event) {
-  console.log(event);
-});
-dragListener.bind('drag', function(event) {
-  console.log(event);
-});
-dragListener.bind('drop', function(event) {
-  console.log(event);
-});
-dragListener.bind('dragend', function(event) {
-  console.log(event);
-});
 
 
 </script>
